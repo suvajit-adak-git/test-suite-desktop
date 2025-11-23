@@ -1,0 +1,113 @@
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 0;
+    /* Adjusted to match the compact look (~475px total height) */
+}
+
+.hero-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-xl);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.hero-logo-icon {
+    background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-headline {
+    font-size: 5rem;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xl);
+    /* Reduced from 2xl to match tighter spacing */
+    max-width: 900px;
+}
+
+.hero-subheadline {
+    color: var(--text-secondary);
+}
+
+.hero-actions {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.lift-off-btn {
+    background-color: #000;
+    /* Black background */
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 50px;
+    /* Pill shape */
+    border: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    /* Smooth animation */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* The Hover Effect */
+.lift-off-btn:hover {
+    transform: translateY(-2px) scale(1.02);
+    /* Moves up slightly and grows */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    /* Shadow grows */
+    background-color: #222;
+    /* Gets slightly lighter */
+}
+
+.apple-icon {
+    font-size: 1.25rem;
+}
+
+.btn-hero-secondary {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 1rem 2rem;
+    border-radius: var(--radius-full);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.btn-hero-secondary:hover {
+    background-color: var(--bg-secondary);
+}
+
+.tools-section {
+    padding: var(--space-xl) 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xl);
+    text-align: center;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-lg);
+}
