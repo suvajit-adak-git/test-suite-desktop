@@ -3,3 +3,7 @@ uvicorn[standard]
 pydantic
 pandas
 openpyxl
+python-multipart
+pytest
+httpx
+ruff
