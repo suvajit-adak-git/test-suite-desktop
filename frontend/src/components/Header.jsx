@@ -8,7 +8,7 @@ const Header = () => {
             <div className="header-left">
                 <Link to="/" className="header-logo">
                     <span className="logo-icon">▲</span>
-                    <span className="logo-text">Google Antigravity</span>
+                    <span className="logo-text">CS TESTING SUITE</span>
                 </Link>
                 <nav className="header-nav">
                     <a href="#" className="nav-link">Product</a>

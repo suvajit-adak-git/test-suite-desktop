@@ -36,10 +36,6 @@ const Home = () => {
         <Layout>
             <ParticleBackground />
             <section className="hero-section">
-                <div className="hero-logo">
-                    <span className="hero-logo-icon">▲</span>
-                    <span className="hero-logo-text">Google Antigravity</span>
-                </div>
                 <h1 className="hero-headline">
                     Experience liftoff<br />
                     <span className="hero-subheadline">with the next-generation IDE</span>
