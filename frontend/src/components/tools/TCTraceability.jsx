@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 
 const TCTraceability = () => {
@@ -8,6 +8,18 @@ const TCTraceability = () => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [activeFilter, setActiveFilter] = useState('failed'); // Default to 'failed'
+
+    // Ref for auto-scrolling to results
+    const resultsRef = useRef(null);
+
+    // Auto-scroll to results when validation results are available
+    useEffect(() => {
+        if (results && resultsRef.current) {
+            setTimeout(() => {
+                resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }, [results]);
 
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -118,7 +130,7 @@ const TCTraceability = () => {
                     display: 'inline-block',
                     width: '100%'
                 }}>
-                    <input type="file" id="traceabilityFile" className="file-input"
+                    <input type="file" id="traceabilityFile" className="file-input" accept=".xls,.xlsx,.xlsm"
                         onChange={handleFileChange}
                         style={{ display: 'none' }}
                     />
@@ -181,7 +193,7 @@ const TCTraceability = () => {
             )}
 
             {results && (
-                <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
+                <div ref={resultsRef} style={{ animation: 'fadeIn 0.5s ease-out' }}>
                     <h3 style={{ marginBottom: '1.5rem', color: '#333' }}>Summary</h3>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
                         <div style={getCardStyle('#3b82f6', 'all')} onClick={() => setActiveFilter('all')}>

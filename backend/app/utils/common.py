@@ -17,11 +17,22 @@ def normalize_filename_for_match(name: Optional[str]) -> str:
     if not name:
         return ""
     s = str(name).strip().lower()
-    # remove file extension
-    s = strip_extension(s)
+    
+    # Extract extension separately
+    extension = ""
+    if "." in s:
+        parts = s.rsplit(".", 1)
+        s = parts[0]
+        extension = parts[1]
+    
     # replace non-alphanumeric with space, collapse whitespace
     s = re.sub(r"[^0-9a-z]+", " ", s)
     s = re.sub(r"\s+", " ", s).strip()
+    
+    # Add extension back to prevent collisions (e.g., file.stp vs file.trf)
+    if extension:
+        s = f"{s} {extension}"
+    
     return s
 
 def extract_int_from_version(s: Optional[str]) -> Optional[int]:

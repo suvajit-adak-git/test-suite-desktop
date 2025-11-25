@@ -1,12 +1,17 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../components/Layout';
 import Card from '../components/Card';
 import ParticleBackground from '../components/ParticleBackground';
 import '../styles/Home.css';
 import svnImage from '../assets/svn-inspector.svg';
+import checklistImage from '../assets/checklist-reviewer-svg.svg';
+import tcTraceabilityImage from '../assets/tc-traceability-svg.svg';
 
 const Home = () => {
+    const navigate = useNavigate();
+
     const tools = [
         {
             id: 'svn',
@@ -21,21 +26,16 @@ const Home = () => {
             title: 'Checklist Reviewer',
             description: 'Process review checklists',
             route: '/checklist',
-            previewText: 'CHECKLIST'
-        },
-        {
-            id: 'compare',
-            title: 'Comparator',
-            description: 'Compare SVN vs Checklist data',
-            route: '/compare',
-            previewText: 'COMPARE'
+            previewText: 'CHECKLIST',
+            image: checklistImage
         },
         {
             id: 'tc-traceability',
             title: 'TC Traceability',
             description: 'Validate TC traceability',
             route: '/tc-traceability',
-            previewText: 'TC'
+            previewText: 'TC',
+            image: tcTraceabilityImage
         }
     ];
 
@@ -44,16 +44,19 @@ const Home = () => {
             <ParticleBackground />
             <section className="hero-section">
                 <h1 className="hero-headline">
-                    Experience liftoff<br />
-                    <span className="hero-subheadline">with the next-generation IDE</span>
+                    Automate <br />
+                    <span className="hero-subheadline">Your Test Validation Process</span>
                 </h1>
                 <div className="hero-actions">
-                    <button className="lift-off-btn">
-                        <span className="apple-icon"></span> Download for MacOS
+                    <button
+                        className="lift-off-btn"
+                        onClick={() => document.getElementById('tools-section')?.scrollIntoView({ behavior: 'smooth' })}
+                    >
+                        <span className="apple-icon">🚀</span> Explore Tools
                     </button>
                     <button
                         className="btn-hero-secondary"
-                        onClick={() => document.getElementById('tools-section')?.scrollIntoView({ behavior: 'smooth' })}
+                        onClick={() => navigate('/use-cases')}
                     >
                         Explore use cases
                     </button>

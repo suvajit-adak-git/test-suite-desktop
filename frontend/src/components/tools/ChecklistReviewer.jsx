@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { extractHyperlinks, updateBuild } from '../../api/svnApi';
 
 const ChecklistReviewer = () => {
@@ -8,6 +8,18 @@ const ChecklistReviewer = () => {
     const [loading, setLoading] = useState(false);
     const [newBuild, setNewBuild] = useState('');
     const [updateLoading, setUpdateLoading] = useState(false);
+
+    // Ref for auto-scrolling to results
+    const resultsRef = useRef(null);
+
+    // Auto-scroll to results when analysis data is available
+    useEffect(() => {
+        if (analysisData && resultsRef.current) {
+            setTimeout(() => {
+                resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }, [analysisData]);
 
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files[0]) {
@@ -183,7 +195,7 @@ const ChecklistReviewer = () => {
             </button>
 
             {analysisData && (
-                <div style={{
+                <div ref={resultsRef} style={{
                     marginTop: '2rem',
                     padding: '1.5rem',
                     background: '#f0f9ff',

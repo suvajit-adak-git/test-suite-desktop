@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="docGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0891b2;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="docGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="arrowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge> 
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Left document (Requirements) -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="70" width="110" height="160" rx="15" fill="url(#docGrad1)"/>
+  </g>
+  
+  <!-- Document content lines -->
+  <rect x="75" y="95" width="80" height="6" rx="3" fill="white" opacity="0.9"/>
+  <rect x="75" y="110" width="70" height="6" rx="3" fill="white" opacity="0.9"/>
+  <rect x="75" y="125" width="75" height="6" rx="3" fill="white" opacity="0.9"/>
+  <rect x="75" y="140" width="65" height="6" rx="3" fill="white" opacity="0.9"/>
+  
+  <!-- Document label -->
+  <text x="115" y="210" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="11" font-weight="bold">REQ</text>
+  
+  <!-- Right document (Test Cases) -->
+  <g filter="url(#shadow)">
+    <rect x="230" y="70" width="110" height="160" rx="15" fill="url(#docGrad2)"/>
+  </g>
+  
+  <!-- Document content lines -->
+  <rect x="245" y="95" width="80" height="6" rx="3" fill="white" opacity="0.9"/>
+  <rect x="245" y="110" width="75" height="6" rx="3" fill="white" opacity="0.9"/>
+  <rect x="245" y="125" width="70" height="6" rx="3" fill="white" opacity="0.9"/>
+  <rect x="245" y="140" width="80" height="6" rx="3" fill="white" opacity="0.9"/>
+  
+  <!-- Document label -->
+  <text x="285" y="210" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="11" font-weight="bold">TC</text>
+  
+  <!-- Connecting arrows with trace lines -->
+  <!-- Arrow 1 -->
+  <g opacity="0.8">
+    <line x1="170" y1="105" x2="230" y2="105" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="4,3"/>
+    <polygon points="230,105 224,102 224,108" fill="#8b5cf6"/>
+  </g>
+  
+  <!-- Arrow 2 -->
+  <g opacity="0.8">
+    <line x1="170" y1="120" x2="230" y2="120" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="4,3"/>
+    <polygon points="230,120 224,117 224,123" fill="#8b5cf6"/>
+  </g>
+  
+  <!-- Arrow 3 -->
+  <g opacity="0.8">
+    <line x1="170" y1="135" x2="230" y2="135" stroke="url(#arrowGrad)" stroke-width="3" stroke-dasharray="4,3"/>
+    <polygon points="230,135 224,132 224,138" fill="#8b5cf6"/>
+  </g>
+  
+  <!-- Central check/validation badge -->
+  <g transform="translate(200, 150)">
+    <circle cx="0" cy="0" r="22" fill="#10b981" filter="url(#shadow)"/>
+    <circle cx="0" cy="0" r="18" fill="#10b981" stroke="white" stroke-width="2"/>
+    <path d="M -7 0 L -3 6 L 8 -8" stroke="white" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Link/chain icon at bottom -->
+  <g transform="translate(200, 245)">
+    <ellipse cx="-8" cy="0" rx="6" ry="8" fill="none" stroke="#0891b2" stroke-width="3" transform="rotate(-30 -8 0)"/>
+    <ellipse cx="8" cy="0" rx="6" ry="8" fill="none" stroke="#7c3aed" stroke-width="3" transform="rotate(30 8 0)"/>
+    <line x1="-4" y1="0" x2="4" y2="0" stroke="#10b981" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

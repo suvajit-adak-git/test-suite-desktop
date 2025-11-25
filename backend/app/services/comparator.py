@@ -6,6 +6,29 @@ from app.utils.common import (
     fuzzy_best_match
 )
 
+# File extensions to ignore during SVN comparison
+IGNORED_EXTENSIONS = {'.mcr', '.mcorder', '.mccache', '.ewo', '.skc', '.vsw', '.html'}
+
+def should_ignore_file(filename: str) -> bool:
+    """
+    Check if a file should be ignored based on its extension.
+    
+    Args:
+        filename: The filename to check
+        
+    Returns:
+        True if the file should be ignored, False otherwise
+    """
+    if not filename:
+        return True
+    
+    # Get file extension (case-insensitive)
+    filename_lower = filename.lower()
+    for ext in IGNORED_EXTENSIONS:
+        if filename_lower.endswith(ext):
+            return True
+    return False
+
 def compare_data(svn_rows: List[Dict[str, Any]], checklist_rows: List[Dict[str, Any]], fuzzy_threshold: float = 0.85) -> Dict[str, Any]:
     # Build canonical maps keyed by normalized filename (no extension)
     # Value is a LIST of entries to handle collisions (e.g. same name, different extension)
@@ -14,6 +37,10 @@ def compare_data(svn_rows: List[Dict[str, Any]], checklist_rows: List[Dict[str, 
         # support both "File" or lowercase/other keys
         filename = r.get("File") if "File" in r else r.get("file") or r.get("Filename") or r.get("filename")
         if not filename:
+            continue
+        
+        # Skip files with ignored extensions
+        if should_ignore_file(filename):
             continue
         norm = normalize_filename_for_match(filename)
         svn_rev_raw = r.get("Last Changed Revision") or r.get("Last Changed Revision".lower()) or r.get("WC Revision") or r.get("revision") or r.get("Revision")
@@ -50,7 +77,9 @@ def compare_data(svn_rows: List[Dict[str, Any]], checklist_rows: List[Dict[str, 
             "filename_original": filename,
             "version_closed_raw": normalize_version_string(r.get("version_closed") or r.get("Version") or r.get("version")),
             "version_closed_int": extract_int_from_version(r.get("version_closed") or r.get("Version") or r.get("version")),
-            "matched": False
+            "matched": False,
+            "inter_sheet_conflict": r.get("inter_sheet_conflict", False),
+            "conflict_comment": r.get("conflict_comment", None)
         }
         
         if norm not in checklist_map:
@@ -123,6 +152,11 @@ def compare_data(svn_rows: List[Dict[str, Any]], checklist_rows: List[Dict[str, 
                         "score": 1.0
                     }
                     
+                    # Add inter-sheet conflict info if present
+                    if best_c_match["inter_sheet_conflict"]:
+                        result_entry["inter_sheet_conflict"] = True
+                        result_entry["conflict_comment"] = best_c_match["conflict_comment"]
+                    
                     if version_equal:
                         matches.append(result_entry)
                     else:
@@ -193,6 +227,12 @@ def compare_data(svn_rows: List[Dict[str, Any]], checklist_rows: List[Dict[str, 
                     "match_type": "fuzzy",
                     "score": score
                 }
+                
+                # Add inter-sheet conflict info if present
+                if c_entry["inter_sheet_conflict"]:
+                    result_entry["inter_sheet_conflict"] = True
+                    result_entry["conflict_comment"] = c_entry["conflict_comment"]
+                
                 if version_equal:
                     matches.append(result_entry)
                 else:
@@ -216,13 +256,20 @@ def compare_data(svn_rows: List[Dict[str, Any]], checklist_rows: List[Dict[str, 
     for c_list in checklist_map.values():
         for c in c_list:
             if not c["matched"]:
-                only_in_checklist.append({
+                entry = {
                     "filename": c["filename_original"],
                     "normalized_filename": c["norm_name"],
                     "version_closed_raw": c["version_closed_raw"],
                     "version_closed_int": c["version_closed_int"],
                     "raw": c["raw"]
-                })
+                }
+                
+                # Add inter-sheet conflict info if present
+                if c["inter_sheet_conflict"]:
+                    entry["inter_sheet_conflict"] = True
+                    entry["conflict_comment"] = c["conflict_comment"]
+                
+                only_in_checklist.append(entry)
 
     return {
         "status": "ok",

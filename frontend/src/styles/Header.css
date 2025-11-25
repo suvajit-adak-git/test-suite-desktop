@@ -23,11 +23,10 @@
 }
 
 .logo-icon {
-    background: linear-gradient(135deg, #4285f4, #34a853, #fbbc05, #ea4335);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 1.25rem;
+    height: 22px;
+    width: auto;
+    object-fit: contain;
+    display: block;
 }
 
 .logo-text {

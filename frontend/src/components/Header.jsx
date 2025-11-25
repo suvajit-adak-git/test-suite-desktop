@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Header.css';
+import sopraLogo from '../assets/SOP.PA-79eae51d.png';
 
 const Header = () => {
     return (
         <header className="header container">
             <div className="header-left">
                 <Link to="/" className="header-logo">
-                    <span className="logo-icon">▲</span>
+                    <img src={sopraLogo} alt="Sopra Steria" className="logo-icon" />
                     <span className="logo-text">CS TESTING SUITE</span>
                 </Link>
                 <nav className="header-nav">

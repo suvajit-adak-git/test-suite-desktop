@@ -196,3 +196,32 @@ async def compare_both(payload: Dict[str, Any] = Body(...)):
         raise HTTPException(status_code=400, detail="Unrecognized checklist blob format")
 
     return compare_data(svn_rows, checklist_rows, fuzzy_threshold)
+
+@router.post("/validate-tc-traceability")
+async def validate_tc_traceability_endpoint(file: UploadFile = File(...)):
+    """
+    Validate Test Case traceability from an uploaded Excel matrix.
+    """
+    from app.services.tc_traceability import validate_tc_traceability
+    
+    fname = file.filename or "traceability.xlsx"
+    if not fname.lower().endswith((".xls", ".xlsx", ".xlsm")):
+        raise HTTPException(status_code=400, detail="Please upload an .xls, .xlsx, or .xlsm file")
+    
+    dest = UPLOAD_DIR / fname
+    counter = 0
+    base = dest.stem
+    ext = dest.suffix
+    while dest.exists():
+        counter += 1
+        dest = UPLOAD_DIR / f"{base}_{counter}{ext}"
+    
+    try:
+        save_upload_file(file, dest)
+        result = validate_tc_traceability(dest)
+        return result
+    finally:
+        try:
+            dest.unlink()
+        except Exception:
+            pass

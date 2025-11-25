@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { uploadSvnFile, uploadReviewChecklist, compareBoth } from '../../api/svnApi';
 import ComparisonTable from '../ComparisonTable';
 
@@ -12,7 +12,22 @@ const SvnInspector = () => {
     const [compareButtonText, setCompareButtonText] = useState('Compare Files');
     const [comparisonData, setComparisonData] = useState(null);
 
+    // Ref for auto-scrolling to results
+    const resultsRef = useRef(null);
+
+    // Auto-scroll to results when comparison data is available
+    useEffect(() => {
+        if (comparisonData && resultsRef.current) {
+            setTimeout(() => {
+                resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+    }, [comparisonData]);
+
     const handleFileChange = async (e, setFileName, setFile, setData, uploadFn) => {
+        // Reset comparison results when new file is selected
+        setComparisonData(null);
+
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             setFileName('✓ ' + file.name);
@@ -49,6 +64,9 @@ const SvnInspector = () => {
         e.preventDefault();
         e.currentTarget.style.borderColor = '#d1d5db';
         e.currentTarget.style.background = '#f8f9fa';
+
+        // Reset comparison results when new file is dropped
+        setComparisonData(null);
 
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             const file = e.dataTransfer.files[0];
@@ -220,7 +238,7 @@ const SvnInspector = () => {
             }}>
                 💡 <strong>Tip:</strong> Upload your SVN file and review checklist to perform a comprehensive comparison. The tool will analyze differences and provide detailed insights.
             </div>
-            {comparisonData && <ComparisonTable data={comparisonData} />}
+            {comparisonData && <div ref={resultsRef}><ComparisonTable data={comparisonData} /></div>}
         </div>
     );
 };

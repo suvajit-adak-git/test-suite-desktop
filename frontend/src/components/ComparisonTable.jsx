@@ -40,17 +40,37 @@ const ComparisonTable = ({ data }) => {
                         </thead>
                         <tbody>
                             {items.map((item, idx) => (
-                                <tr key={idx} style={{ backgroundColor: 'var(--bg-card)' }}>
-                                    {columns.map((col, cIdx) => (
-                                        <td key={cIdx} style={{
-                                            border: '1px solid var(--border-color)',
-                                            padding: '12px',
-                                            color: 'var(--text-secondary)'
-                                        }}>
-                                            {col.accessor(item)}
-                                        </td>
-                                    ))}
-                                </tr>
+                                <React.Fragment key={idx}>
+                                    <tr style={{
+                                        backgroundColor: item.inter_sheet_conflict ? '#fff3cd' : 'var(--bg-card)',
+                                        borderLeft: item.inter_sheet_conflict ? '4px solid #f59e0b' : 'none'
+                                    }}>
+                                        {columns.map((col, cIdx) => (
+                                            <td key={cIdx} style={{
+                                                border: '1px solid var(--border-color)',
+                                                padding: '12px',
+                                                color: 'var(--text-secondary)'
+                                            }}>
+                                                {col.accessor(item)}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                    {item.inter_sheet_conflict && item.conflict_comment && (
+                                        <tr style={{ backgroundColor: '#fff9e6' }}>
+                                            <td colSpan={columns.length} style={{
+                                                border: '1px solid var(--border-color)',
+                                                padding: '8px 12px',
+                                                fontSize: '0.85rem',
+                                                color: '#856404',
+                                                backgroundColor: '#fff3cd',
+                                                borderLeft: '4px solid #f59e0b'
+                                            }}>
+                                                <span style={{ marginRight: '8px', fontSize: '1rem' }}>⚠️</span>
+                                                <strong>Version Conflict:</strong> {item.conflict_comment}
+                                            </td>
+                                        </tr>
+                                    )}
+                                </React.Fragment>
                             ))}
                         </tbody>
                     </table>
