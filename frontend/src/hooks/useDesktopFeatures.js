@@ -20,8 +20,7 @@ const useDesktopFeatures = () => {
 
             // Listen for update notifications
             window.electronAPI.onUpdateAvailable(() => {
-                console.log('Update available!');
-                // You can show a notification to the user here
+                // Update notification handled by UpdateNotifier component
             });
         }
     }, []);

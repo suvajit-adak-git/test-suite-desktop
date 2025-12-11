@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Header';
+import UpdateNotifier from './UpdateNotifier';
 
 const Layout = ({ children }) => {
     return (
@@ -8,6 +9,7 @@ const Layout = ({ children }) => {
             <main className="container">
                 {children}
             </main>
+            <UpdateNotifier />
         </div>
     );
 };

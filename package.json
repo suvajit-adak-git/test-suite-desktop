@@ -6,13 +6,14 @@
   "author": "Test Suite Team",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
+    "obfuscate": "node scripts/obfuscate.js",
+    "postinstall": "cd frontend && npm install && cd ../backend && python -m pip install -r requirements.txt",
     "frontend:dev": "cd frontend && npm run dev",
     "frontend:build": "cd frontend && npm run build",
-    "backend:dev": "cd backend && uvicorn app.main:app --reload --port 8000",
-    "backend:build": "bash scripts/build-backend.sh",
+    "backend:dev": "cd backend && python -m uvicorn app.main:app --reload --port 8000",
+    "backend:build": "cd backend && python -m PyInstaller backend.spec --clean --noconfirm",
     "electron:dev": "concurrently \"npm run frontend:dev\" \"npm run backend:dev\" \"wait-on http://localhost:5173 && wait-on http://localhost:8000/health && electron .\"",
-    "electron:build": "npm run frontend:build && npm run backend:build && electron-builder",
+    "electron:build": "npm run obfuscate && npm run frontend:build && npm run backend:build && electron-builder",
     "electron:build:win": "npm run frontend:build && npm run backend:build && electron-builder --win",
     "electron:build:mac": "npm run frontend:build && npm run backend:build && electron-builder --mac",
     "electron:build:linux": "npm run frontend:build && npm run backend:build && electron-builder --linux",
@@ -20,6 +21,7 @@
     "build": "npm run electron:build"
   },
   "dependencies": {
+    "app-builder-bin": "^4.2.0",
     "axios": "^1.6.2",
     "electron-log": "^5.0.1",
     "electron-store": "^8.1.0",
@@ -28,12 +30,14 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "electron": "^28.0.0",
-    "electron-builder": "^24.9.1",
+    "electron-builder": "^24.13.3",
+    "javascript-obfuscator": "^5.0.1",
     "wait-on": "^7.2.0"
   },
   "build": {
     "appId": "com.testsuite.desktop",
     "productName": "Test Suite",
+    "asar": true,
     "directories": {
       "output": "dist",
       "buildResources": "build"

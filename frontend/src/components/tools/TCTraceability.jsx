@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../../config/api';
 
 const TCTraceability = () => {
     // Mode state: 'validate' or 'cia'
@@ -87,6 +88,7 @@ const TCTraceability = () => {
     };
 
     const handleSubmit = async () => {
+        const API_BASE = getApiUrl();
         if (mode === 'validate') {
             if (!file) {
                 setError('Please select a file');
@@ -98,7 +100,7 @@ const TCTraceability = () => {
             formData.append('file', file);
 
             try {
-                const response = await axios.post('http://localhost:8000/api/validate-tc-traceability', formData, {
+                const response = await axios.post(`${API_BASE}/validate-tc-traceability`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -125,7 +127,7 @@ const TCTraceability = () => {
             formData.append('cia_file', ciaFile);
 
             try {
-                const response = await axios.post('http://localhost:8000/api/compare-cia', formData, {
+                const response = await axios.post(`${API_BASE}/compare-cia`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },

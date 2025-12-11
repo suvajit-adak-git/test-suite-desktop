@@ -7,6 +7,7 @@ const BackendManager = require('./backend-manager');
 
 // Configure logging
 log.transports.file.level = 'info';
+log.transports.file.resolvePathFn = () => path.join(__dirname, '../logs/main.log');
 autoUpdater.logger = log;
 
 // Initialize store for app settings
@@ -17,7 +18,19 @@ let tray = null;
 let backendManager = null;
 
 const isDev = process.env.NODE_ENV === 'development' || !app.isPackaged;
-const BACKEND_PORT = 8000;
+let BACKEND_PORT = 8000;
+
+// Helper to find a free port
+const getFreePort = async () => {
+  return new Promise((resolve, reject) => {
+    const srv = require('net').createServer();
+    srv.listen(0, () => {
+      const port = srv.address().port;
+      srv.close(() => resolve(port));
+    });
+    srv.on('error', (err) => reject(err));
+  });
+};
 
 // Auto-updater configuration
 function setupAutoUpdater() {
@@ -51,7 +64,7 @@ function setupAutoUpdater() {
 
 // Create system tray
 function createTray() {
-  const trayIconPath = path.join(__dirname, '../build/tray-icon.png');
+  const trayIconPath = path.join(__dirname, 'assets/tray-icon.png');
   tray = new Tray(trayIconPath);
 
   const contextMenu = Menu.buildFromTemplate([
@@ -102,26 +115,26 @@ function createMenu() {
   const template = [
     ...(isMac
       ? [
-          {
-            label: app.name,
-            submenu: [
-              { role: 'about' },
-              { type: 'separator' },
-              {
-                label: 'Check for Updates',
-                click: () => autoUpdater.checkForUpdates(),
-              },
-              { type: 'separator' },
-              { role: 'services' },
-              { type: 'separator' },
-              { role: 'hide' },
-              { role: 'hideOthers' },
-              { role: 'unhide' },
-              { type: 'separator' },
-              { role: 'quit' },
-            ],
-          },
-        ]
+        {
+          label: app.name,
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            {
+              label: 'Check for Updates',
+              click: () => autoUpdater.checkForUpdates(),
+            },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' },
+          ],
+        },
+      ]
       : []),
     {
       label: 'File',
@@ -159,10 +172,10 @@ function createMenu() {
         { role: 'paste' },
         ...(isMac
           ? [
-              { role: 'pasteAndMatchStyle' },
-              { role: 'delete' },
-              { role: 'selectAll' },
-            ]
+            { role: 'pasteAndMatchStyle' },
+            { role: 'delete' },
+            { role: 'selectAll' },
+          ]
           : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }]),
       ],
     },
@@ -171,7 +184,7 @@ function createMenu() {
       submenu: [
         { role: 'reload' },
         { role: 'forceReload' },
-        { role: 'toggleDevTools' },
+        ...(isDev ? [{ role: 'toggleDevTools' }] : []),
         { type: 'separator' },
         { role: 'resetZoom' },
         { role: 'zoomIn' },
@@ -236,7 +249,7 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false,
+      sandbox: true, // Enable for maximum security
     },
     icon: path.join(__dirname, '../build/icon.png'),
     show: false, // Don't show until ready
@@ -328,6 +341,17 @@ function setupIpcHandlers() {
 app.whenReady().then(async () => {
   log.info('App starting...');
 
+  // Get a free port for the backend
+  // Get a free port for the backend
+  try {
+    log.info(`isDev value: ${isDev}`);
+    BACKEND_PORT = await getFreePort();
+    log.info(`Selected dynamic port for backend: ${BACKEND_PORT}`);
+  } catch (err) {
+    log.error('Failed to find free port:', err);
+    BACKEND_PORT = 0; // Let backend choose (if supported) or fail loudly
+  }
+
   // Start backend
   backendManager = new BackendManager(BACKEND_PORT, isDev);
   try {
@@ -335,7 +359,7 @@ app.whenReady().then(async () => {
     log.info('Backend started successfully');
   } catch (error) {
     log.error('Failed to start backend:', error);
-    dialog.showErrorBox('Backend Error', 'Failed to start the backend server. The application may not function correctly.');
+    dialog.showErrorBox('Backend Error', `Failed to start the backend server. The application may not function correctly.\n\nError details: ${error.message || error.toString()}`);
   }
 
   // Create window and UI

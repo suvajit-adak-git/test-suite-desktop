@@ -6,7 +6,7 @@ dist/
 # Backend build artifacts
 backend/dist/
 backend/build/
-backend/*.spec
+
 
 # Frontend build
 frontend/dist/
@@ -31,3 +31,4 @@ backend/env/
 # Electron
 out/
 .webpack/
+obfuscated-electron/
