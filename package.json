@@ -52,6 +52,11 @@
         ]
       }
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "suvajit-adak-git",
+      "repo": "test-suite-desktop"
+    },
     "mac": {
       "category": "public.app-category.developer-tools",
       "target": [
