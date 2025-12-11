@@ -1,0 +1,49 @@
+.desktop-file-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.desktop-file-button {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+}
+
+.desktop-file-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+}
+
+.desktop-file-button:active {
+  transform: translateY(0);
+}
+
+.selected-file-name {
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 500;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.web-file-input .file-input {
+  padding: 8px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.web-file-input .file-input:hover {
+  border-color: #764ba2;
+}
